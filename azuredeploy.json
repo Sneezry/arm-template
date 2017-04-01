@@ -1,0 +1,107 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "components_function_app_ai_name": {
+            "type": "string"
+        },
+        "storageAccounts_function_name": {
+            "type": "string"
+        },
+        "serverfarms_name": {
+            "type": "string"
+        },
+        "sites_function_app_name": {
+            "type": "string"
+        },
+        "ai_location": {
+            "type": "string"
+        },
+        "function_app_location": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Insights/components",
+            "kind": "other",
+            "name": "[parameters('components_function_app_ai_name')]",
+            "apiVersion": "2014-04-01",
+            "location": "[parameters('ai_location')]",
+            "tags": {},
+            "properties": {
+                "ApplicationId": "[parameters('components_function_app_ai_name')]"
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[parameters('storageAccounts_function_name')]",
+            "apiVersion": "2016-01-01",
+            "location": "[parameters('function_app_location')]",
+            "tags": {},
+            "properties": {},
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
+            },
+            "kind": "functionapp",
+            "name": "[parameters('serverfarms_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[parameters('function_app_location')]",
+            "properties": {
+                "name": "[parameters('serverfarms_name')]",
+                "numberOfWorkers": 0
+            },
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[parameters('sites_function_app_name')]",
+            "apiVersion": "2015-08-01",
+            "location": "[parameters('function_app_location')]",
+            "properties": {
+                "name": "[parameters('sites_function_app_name')]",
+                "hostNames": [
+                    "[concat(parameters('sites_function_app_name'),'.azurewebsites.net')]"
+                ],
+                "enabledHostNames": [
+                    "[concat(parameters('sites_function_app_name'),'.azurewebsites.net')]",
+                    "[concat(parameters('sites_function_app_name'),'.scm.azurewebsites.net')]"
+                ],
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_function_app_name'),'.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    },
+                    {
+                        "name": "[concat(parameters('sites_function_app_name'),'.scm.azurewebsites.net')]",
+                        "sslState": 0,
+                        "thumbprint": null,
+                        "ipBasedSslState": 0
+                    }
+                ],
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_name'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_name'))]"
+            ]
+        }
+    ]
+}
