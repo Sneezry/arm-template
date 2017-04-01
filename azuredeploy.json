@@ -91,18 +91,20 @@
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
-            ]
-        },
-        {
-            "apiVersion": "2015-08-01",
-            "name": "appsettings",
-            "type": "config",
-            "dependsOn": [
-                "[concat('Microsoft.Web/sites/', parameters('functionAppName'))]"
             ],
-            "properties": {
-                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('Microsoft.Insights/components/', concat(parameters('functionAppName'), '-application-insights')).InstrumentationKey]"
-            }
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('functionAppName'))]"
+                    ],
+                    "properties": {
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('Microsoft.Insights/components/', concat(parameters('functionAppName'), '-application-insights')).InstrumentationKey]"
+                    }
+                }
+            ]
         }
     ]
 }
