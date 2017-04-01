@@ -101,7 +101,7 @@
                         "[concat('Microsoft.Web/sites/', parameters('functionAppName'))]"
                     ],
                     "properties": {
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('Microsoft.Insights/components/', concat(parameters('functionAppName'), '-application-insights')).InstrumentationKey]"
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('Microsoft.Insights/components/', parameters('functionAppName'), '-application-insights').InstrumentationKey]"
                     }
                 }
             ]
