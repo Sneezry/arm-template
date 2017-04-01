@@ -5,7 +5,7 @@
         "functionAppName": {
             "type": "string"
         },
-        "functionAppLocation": {
+        "siteLocation": {
             "type": "string"
         }
     },
@@ -32,7 +32,7 @@
             "kind": "Storage",
             "name": "[concat(parameters('functionAppName'), '-storage')]",
             "apiVersion": "2016-01-01",
-            "location": "[parameters('functionAppLocation')]",
+            "location": "[parameters('siteLocation')]",
             "tags": {},
             "properties": {},
             "dependsOn": []
@@ -49,7 +49,7 @@
             "kind": "functionapp",
             "name": "[parameters('functionAppName')]",
             "apiVersion": "2015-08-01",
-            "location": "[parameters('functionAppLocation')]",
+            "location": "[parameters('siteLocation')]",
             "properties": {
                 "name": "[parameters('functionAppName')]",
                 "numberOfWorkers": 0
@@ -63,7 +63,7 @@
             "kind": "functionapp",
             "name": "[parameters('functionAppName')]",
             "apiVersion": "2015-08-01",
-            "location": "[parameters('functionAppLocation')]",
+            "location": "[parameters('siteLocation')]",
             "properties": {
                 "name": "[parameters('functionAppName')]",
                 "hostNames": [
