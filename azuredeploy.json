@@ -14,7 +14,7 @@
         {
             "type": "Microsoft.Insights/components",
             "kind": "other",
-            "name": "[parameters('functionAppName']",
+            "name": "[parameters('functionAppName')]",
             "apiVersion": "2014-04-01",
             "location": "Central US",
             "tags": { "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource" },
@@ -30,7 +30,7 @@
                 "tier": "Standard"
             },
             "kind": "Storage",
-            "name": "[parameters('functionAppName']",
+            "name": "[parameters('functionAppName')]",
             "apiVersion": "2016-01-01",
             "location": "[parameters('siteLocation')]",
             "tags": {},
