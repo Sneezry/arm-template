@@ -17,7 +17,7 @@
             "name": "[concat(parameters('functionAppName'), '-application-insights')]",
             "apiVersion": "2014-04-01",
             "location": "Central US",
-            "tags": { "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('siteName'))]": "Resource" },
+            "tags": { "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource" },
             "properties": {
                 "ApplicationId": "[parameters('functionAppName')]"
             },
