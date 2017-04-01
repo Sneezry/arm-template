@@ -9,7 +9,10 @@
             "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "storageAccountName": "[concat('storage', uniquestring(resourceGroup().id))]",
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Insights/components",
@@ -22,6 +25,15 @@
                 "ApplicationId": "[parameters('functionAppName')]"
             },
             "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('storageAccountName')]",
+            "apiVersion": "2015-06-15",
+            "location": "[parameters('siteLocation')]",
+            "properties": {
+                "accountType": "Standard_LRS"
+            }
         },
         {
             "type": "Microsoft.Web/serverfarms",
@@ -76,7 +88,8 @@
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]"
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
             "resources": [
                 {
@@ -87,7 +100,13 @@
                         "[concat('Microsoft.Web/sites/', parameters('functionAppName'))]"
                     ],
                     "properties": {
-                        "applicationInsightsInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('functionAppName')), '2014-04-01').InstrumentationKey]"
+                        "applicationInsightsInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('functionAppName')), '2014-04-01').InstrumentationKey]",
+                        "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                        "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                        "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                        "WEBSITE_CONTENTSHARE": "[toLower(parameters('functionAppName'))]",
+                        "FUNCTIONS_EXTENSION_VERSION": "~1",
+                        "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0"
                     }
                 }
             ]
