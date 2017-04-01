@@ -16,25 +16,11 @@
             "kind": "other",
             "name": "[parameters('functionAppName')]",
             "apiVersion": "2014-04-01",
-            "location": "Central US",
+            "location": "East US",
             "tags": { "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('functionAppName'))]": "Resource" },
             "properties": {
                 "ApplicationId": "[parameters('functionAppName')]"
             },
-            "dependsOn": []
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('functionAppName')]",
-            "apiVersion": "2016-01-01",
-            "location": "[parameters('siteLocation')]",
-            "tags": {},
-            "properties": {},
             "dependsOn": []
         },
         {
@@ -55,7 +41,7 @@
                 "numberOfWorkers": 0
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Insights/components', parameters('functionAppName')]"
+                "[resourceId('Microsoft.Insights/components', parameters('functionAppName'))]"
             ]
         },
         {
@@ -101,7 +87,7 @@
                         "[concat('Microsoft.Web/sites/', parameters('functionAppName'))]"
                     ],
                     "properties": {
-                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('functionAppName')), '2016-01-01').InstrumentationKey]"
+                        "applicationInsightsInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components', parameters('functionAppName')), '2014-04-01').InstrumentationKey]"
                     }
                 }
             ]
