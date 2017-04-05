@@ -7,6 +7,9 @@
         },
         "siteLocation": {
             "type": "string"
+        },
+        "repoUrl": {
+            "type": "string"
         }
     },
     "variables": {
@@ -40,27 +43,14 @@
             "resources":[  
                 {
                     "apiVersion":"2015-08-01",
-                    "name":"diagnostics",
+                    "name":"insights-metrics-pt1m",
                     "type":"eventhubs",
                     "dependsOn":[
                         "[concat('Microsoft.EventHub/namespaces/', variables('eventhubNamespace'))]"
                     ],
                     "properties":{
-                        "path":"diagnostics"
-                    },
-                    "resources":[
-                        {  
-                            "apiVersion":"2015-08-01",
-                            "name":"diagnostics",
-                            "type":"consumergroups",
-                            "dependsOn":[  
-                                "[variables('eventhubNamespace')]"
-                            ],
-                            "properties":{  
-
-                            }
-                        }
-                    ]
+                        "path":"insights-metrics-pt1m"
+                    }
                 }
             ]
         },
@@ -128,7 +118,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppName'))]",
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Storage/eventhubs', 'diagnostics')]"
+                "[resourceId('Microsoft.EventHub/namespaces', variables('eventhubNamespace'))]"
             ],
             "resources": [
                 {
@@ -147,6 +137,20 @@
                         "FUNCTIONS_EXTENSION_VERSION": "~1",
                         "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
                         "diagnostics-event-hub": "[listkeys(variables('eventhubResourceId'), '2015-08-01').primaryConnectionString]"
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "sourcecontrols",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('functionAppName'))]",
+                        "[concat('Microsoft.Web/Sites/', parameters('functionAppName'), '/config/appsettings')]"
+                    ],
+                    "properties": {
+                        "RepoUrl": "[parameters('repoUrl')]",
+                        "branch": "source",
+                        "IsManualIntegration": true
                     }
                 }
             ]
