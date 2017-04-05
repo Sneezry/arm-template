@@ -3,6 +3,8 @@
 var AppInsights = require('applicationinsights');
 var aiClient = AppInsights.getClient(process.env.applicationInsightsInstrumentationKey);
 
-module.exports = function (context, diagnosticEvent) {
-    aiClient.trackEvent('diagnostics', diagnosticEvent);
+module.exports = function (context, diagnosticEvents) {
+    diagnosticEvents.records.forEach(function(diagnosticEvent) {
+        aiClient.trackEvent('diagnostics', diagnosticEvent);
+    });
 }
