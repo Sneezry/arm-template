@@ -4,7 +4,7 @@
       "type": "eventHubTrigger",
       "name": "diagnostics",
       "direction": "in",
-      "path": "diagnostics",
+      "path": "insights-metrics-pt1m",
       "connection": "diagnostics-event-hub",
       "consumerGroup": "$Default"
     }
