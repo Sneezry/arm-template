@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "diagnostics",
+      "direction": "in",
+      "path": "diagnostics",
+      "connection": "diagnostics-event-hub",
+      "consumerGroup": "$Default"
+    }
+  ],
+  "disabled": false
+}
